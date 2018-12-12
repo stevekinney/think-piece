@@ -16,17 +16,29 @@ class Application extends Component {
     this.setState({ posts });
   };
 
-  handleCreate = async (post) => {
-    const documentReference = await firestore.collection('posts').add(post);
-    const data = await documentReference.get();
+  handleCreate = async post => {
+    const docRef = await firestore.collection('posts').add(post);
+    const doc = await docRef.get();
 
     const newPost = {
-      id: documentReference.id,
-      ...data
-    }
+      id: doc.id,
+      ...doc.data(),
+    };
 
     const { posts } = this.state;
     this.setState({ posts: [newPost, ...posts] });
+  };
+
+  handleRemove = async (id) => {
+    const allPosts = this.state.posts;
+
+    try {
+      await firestore.collection('posts').doc(id).delete();
+      const posts = allPosts.filter(post => id !== post.id);
+      this.setState({ posts });
+    } catch (error) {
+      console.error(error);
+    }
   };
 
   render() {
@@ -35,7 +47,11 @@ class Application extends Component {
     return (
       <main className="Application">
         <h1>Think Piece</h1>
-        <Posts posts={posts} onCreate={this.handleCreate} />
+        <Posts
+          posts={posts}
+          onCreate={this.handleCreate}
+          onRemove={this.handleRemove}
+        />
       </main>
     );
   }
