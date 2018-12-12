@@ -12,12 +12,12 @@ class AddPost extends Component {
     event.preventDefault();
 
     const { onCreate } = this.props;
-    const { title, body } = this.state;
+    const { title, content } = this.state;
 
     const post = {
       id: Date.now().toString(),
       title,
-      body,
+      content,
       user: {
         uid: '1111',
         displayName: 'Steve Kinney',
@@ -25,6 +25,7 @@ class AddPost extends Component {
         photoURL: 'http://placekitten.com/g/200/200',
       },
       favorites: 0,
+      comments: 0,
       createdAt: new Date(),
     }
 

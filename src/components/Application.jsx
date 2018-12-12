@@ -17,6 +17,7 @@ class Application extends Component {
           photoURL: 'https://www.fillmurray.com/300/300',
         },
         stars: 1,
+        comments: 47,
       },
       {
         id: '2',
@@ -30,6 +31,7 @@ class Application extends Component {
           photoURL: 'https://www.fillmurray.com/400/400',
         },
         stars: 3,
+        comments: 0,
       },
     ],
   };
