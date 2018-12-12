@@ -1,0 +1,192 @@
+$input-color: #7dbbc3;
+$button-color: #f4b9b2;
+$info-color: #daedbd;
+$comment-highlight-color: #de6b48;
+$danger-color: #de6b48;
+
+@mixin button($color) {
+  background-color: $color;
+  border: 1px solid darken($color, 10);
+  &:hover {
+    background-color: lighten($color, 10);
+  }
+  &:active {
+    background-color: lighten($color, 20);
+  }
+}
+
+html,
+*,
+*:before,
+*:after {
+  box-sizing: border-box;
+  color: #2d3436;
+}
+
+html,
+body,
+input {
+  font: menu;
+}
+
+input,
+button {
+  display: block;
+  width: 100%;
+  &:not(:last-child) {
+    margin-bottom: 5px;
+  }
+  &:focus {
+    outline: none;
+  }
+}
+
+input[type='text'],
+input[type='email'],
+input[type='password'] {
+  border: none;
+  border-bottom: 1px solid $input-color;
+  font-size: 1.5em;
+  padding: 0.5em;
+}
+
+button,
+input[type='submit'],
+.button {
+  display: block;
+  width: 100%;
+  font-size: 1.1em;
+  padding: 0.5em;
+  @include button($button-color);
+  &.star, &.create {
+    @include button($input-color);
+  }
+  &.delete {
+    @include button($danger-color);
+  }
+}
+
+.Application {
+  max-width: 600px;
+  margin: auto;
+}
+
+%authentication {
+  border: 1px solid $input-color;
+  padding: 1em;
+  margin-bottom: 1em;
+  h2 {
+    margin: 0.5em 0.5em;
+    padding: 0.5em;
+    border-left: 5px solid $info-color;
+  }
+}
+
+.SignIn {
+  @extend %authentication;
+}
+
+.SignUp {
+  @extend %authentication;
+}
+
+.UserProfile {
+  @extend %authentication;
+  .UserProfile--profile {
+    display: flex;
+    margin-bottom: 0.5em;
+  }
+  .UserProfile--information {
+    flex: 4;
+  }
+  img {
+    flex: 1;
+    margin-right: 1em;
+    max-height: 150px;
+  }
+  h2 {
+    margin-bottom: 1em;
+  }
+  .created-at:before {
+    content: 'Joined';
+    color: $comment-highlight-color;
+    font-weight: bold;
+    margin: 0.5em 0.5em;
+  }
+  .email:before {
+    content: 'Email';
+    color: $comment-highlight-color;
+    font-weight: bold;
+    margin: 0.5em 0.5em;
+  }
+}
+
+.AddPost,
+.AddComment {
+  margin-bottom: 1em;
+}
+
+.AddComment {
+  display: flex;
+  input {
+    margin: 0;
+    padding: 0.5em;
+  }
+  input[type="text"] {
+    flex: 3;
+  }
+  input[type="submit"] {
+    flex: 1;
+  }
+}
+
+.Post {
+  border: 1px solid $input-color;
+  margin-bottom: 1em;
+}
+
+.Post--content {
+  padding: 1em;
+  h3 {
+    margin-top: 0;
+  }
+}
+
+.Post--meta {
+  padding: 0.5em;
+  background-color: $info-color;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  p {
+    display: inline-block;
+    margin: 1em;
+  }
+  button {
+    display: inline-block;
+    width: auto;
+    &:not(:last-child) {
+      margin-right: 5px;
+      margin-bottom: 0;
+    }
+  }
+}
+
+.Comment {
+  margin: 1em 0;
+}
+
+.Comment--author {
+  color: $comment-highlight-color;
+  font-weight: bold;
+  &:after {
+    content: ': ';
+  }
+}
+
+.Comment--timestamp {
+  color: darken($info-color, 40);
+  &:before {
+    content: ' ';
+  }
+}
