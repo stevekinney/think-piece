@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
-import { firestore } from '../firebase';
+import { firestore, auth } from '../firebase';
+import { getUserDocument } from '../utilities';
 
 class AddPost extends Component {
   state = { title: '', content: '' };
@@ -9,26 +10,23 @@ class AddPost extends Component {
     this.setState({ [name]: value });
   };
 
-  handleSubmit = event => {
+  handleSubmit = async event => {
     event.preventDefault();
 
     const { title, content } = this.state;
 
+    const user = await getUserDocument(auth.currentUser.uid);
+
     const post = {
       title,
       content,
-      user: {
-        uid: '1111',
-        displayName: 'Steve Kinney',
-        email: 'steve@mailinator.com',
-        photoURL: 'http://placekitten.com/g/200/200',
-      },
+      user,
       favorites: 0,
       comments: 0,
       createdAt: new Date(),
     }
 
-    firestore.collection('posts').add(post);
+    await firestore.collection('posts').add(post);
 
     this.setState({ title: '', content: '' });
   };

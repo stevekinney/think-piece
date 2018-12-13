@@ -1,7 +1,7 @@
 import React, { useContext } from 'react'
 import { UserContext } from '../providers/UserProvider';
-import SignIn from './SignIn';
 import CurrentUser from './CurrentUser';
+import SignInOrSignUp from './SignInOrSignUp';
 
 const Authentication = () => {
   const { user, loaded } = useContext(UserContext);
@@ -10,7 +10,7 @@ const Authentication = () => {
 
   return (
     <div>
-      {user ? <CurrentUser {...user} /> : <SignIn />}
+      {user ? <CurrentUser {...user} /> : <SignInOrSignUp />}
     </div>
   )
 };

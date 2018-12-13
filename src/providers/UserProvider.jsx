@@ -1,16 +1,23 @@
 import React, { Component, createContext } from 'react';
 import { auth } from '../firebase';
-import { createUserDocument } from '../utilities';
+import { createUserDocument, collectIdsAndData } from '../utilities';
 
 export const UserContext = createContext({ user: null });
 
 class UserProvider extends Component {
   state = { user: null, loaded: false };
 
+  unsubscribeFromAuth = null;
+  unsubscribeFromUser = null;
+
   componentDidMount = async () => {
     this.unsubscribeFromAuth = auth.onAuthStateChanged(async userInfo => {
-      const user = await createUserDocument(userInfo);
-      this.setState({ user, loaded: true });
+      const userRef = await createUserDocument(userInfo);
+
+      userRef.onSnapshot(snapshot => {
+        const user = collectIdsAndData(snapshot);
+        this.setState({ user, loaded: true });
+      });
     });
   };
 

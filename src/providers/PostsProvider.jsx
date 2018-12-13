@@ -1,5 +1,6 @@
 import React, { Component, createContext } from 'react';
 import { firestore } from '../firebase';
+import { collectIdsAndData } from '../utilities';
 
 export const PostsContext = createContext();
 
@@ -10,7 +11,7 @@ class PostsProvider extends Component {
 
   componentDidMount = () => {
     this.unsubscribe = firestore.collection('posts').onSnapshot(snapshot => {
-      const posts = snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
+      const posts = snapshot.docs.map(collectIdsAndData);
       this.setState({ posts });
     });
   };

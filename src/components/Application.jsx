@@ -1,21 +1,24 @@
 import React, { Component } from 'react';
 
 import Posts from './Posts';
-import CurrentUser from './CurrentUser';
-
-import { firestore, auth } from '../firebase';
-import { collectIdsAndData, createUserDocument } from '../utilities';
-import SignInOrSignUp from './SignInOrSignUp';
 import Authentication from './Authenication';
+
+import { Switch, Link, Route } from 'react-router-dom';
+import UserProfile from './UserProfilePage';
+import PostPage from './PostPage';
 
 class Application extends Component {
 
   render() {
     return (
       <main className="Application">
-        <h1>Think Piece</h1>
+        <Link to="/"><h1>Think Piece</h1></Link>
         <Authentication  />
-        <Posts />
+        <Switch>
+          <Route exact path="/" component={Posts} />
+          <Route exact path="/profile" component={UserProfile} />
+          <Route path="/posts/:id" component={PostPage} />
+        </Switch>
       </main>
     );
   }

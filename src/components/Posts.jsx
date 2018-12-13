@@ -9,7 +9,7 @@ const Posts = () => {
   return (
     <section className="Posts">
       <AddPost />
-        {posts.map(post => <Post {...post} key={post.id} />)}
+      {posts.map(post => <Post {...post} key={post.id} />)}
     </section>
   );
 };

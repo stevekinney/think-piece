@@ -3,13 +3,15 @@ import React from 'react';
 import moment from 'moment';
 import { firestore } from '../firebase';
 
+import { Link } from 'react-router-dom';
+
 const Post = ({ id, title, content, user, createdAt, stars, comments }) => {
   const postRef = firestore.doc(`posts/${id}`);
 
   return (
     <article className="Post">
       <div className="Post--content">
-        <h3>{title}</h3>
+        <Link to={`/posts/${id}`}><h3>{title}</h3></Link>
         <div>{content}</div>
       </div>
       <div className="Post--meta">
@@ -27,7 +29,7 @@ const Post = ({ id, title, content, user, createdAt, stars, comments }) => {
             {comments}
           </p>
           <p>Posted by {user.displayName}</p>
-          <p>{moment(createdAt.toDate()).calendar()}</p>
+          <p>{moment(createdAt.toDate && createdAt.toDate()).calendar()}</p>
         </div>
         <div>
           <button className="star" onClick={() => postRef.update({ stars: stars + 1 })} >Star</button>

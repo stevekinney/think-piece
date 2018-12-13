@@ -1,4 +1,7 @@
 import React, { Component } from 'react';
+import withUser from './withUser';
+import { withRouter } from 'react-router-dom';
+import { firestore } from '../firebase';
 
 class AddComment extends Component {
   state = { content: '' };
@@ -11,11 +14,20 @@ class AddComment extends Component {
   handleSubmit = event => {
     event.preventDefault();
 
+
+    const { user } = this.props.user;
+    const { id: postId } = this.props.match.params;
+
+    firestore.collection(`posts/${postId}/comments`).add({
+      ...this.state, user
+    });
+
     this.setState({ content: '' });
   };
 
   render() {
     const { content } = this.state;
+
     return (
       <form onSubmit={this.handleSubmit} className="AddComment">
         <input
@@ -31,4 +43,4 @@ class AddComment extends Component {
   }
 }
 
-export default AddComment;
+export default withRouter(withUser(AddComment));
