@@ -48,18 +48,48 @@ exports.decrementCommentCount = functions.firestore
     return postRef.update({ comments: comments - 1 });
   });
 
+exports.sanitizeContent = functions.firestore
+  .document('posts/{postId}')
+  .onWrite(async change => {
+    if (!change.after.exists) return;
+
+    const { content, sanitized } = change.after.data();
+
+    if (content && !sanitized) {
+      return change.after.ref.update({
+        content: content.replace(/CoffeeScript/g, '***'),
+        sanitized: true,
+      });
+    }
+
+    return null;
+  });
+
 exports.updateUserInformation = functions.firestore
   .document('users/{userId}')
-  .onCreate(async (snapshot, context) => {
-    const { displayName } = snapshot.data();
+  .onUpdate(async (change, context) => {
+    const { displayName } = change.after.data();
 
-    const postsRef = firestore
+    const posts = await admin
+      .firestore()
       .collection('posts')
-      .where('user.uid', '==', snapshot.id);
+      .where('user.uid', '==', change.after.id)
+      .get();
 
-    return postsRef.get(postSnaps => {
-      postSnaps.forEach(doc => {
-        doc.ref.update({ 'user.displayName': displayName });
-      });
+    return posts.forEach(doc => {
+      doc.ref.update({ 'user.displayName': displayName });
     });
   });
+
+exports.createUserDocument = functions.auth.user().onCreate(user => {
+  const { uid, email, displayName, photoURL } = user;
+  return firestore
+    .collection('users')
+    .doc(uid)
+    .set({
+      email,
+      displayName,
+      photoURL,
+      createdByCloudFunction: true,
+    });
+});
