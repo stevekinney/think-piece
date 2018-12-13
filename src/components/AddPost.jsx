@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { firestore } from '../firebase';
+import { firestore, auth } from '../firebase';
 
 class AddPost extends Component {
   state = { title: '', content: '' };
@@ -13,15 +13,16 @@ class AddPost extends Component {
     event.preventDefault();
 
     const { title, content } = this.state;
+    const { uid, displayName, email, photoURL } = auth.currentUser || {};
 
     const post = {
       title,
       content,
       user: {
-        uid: '1111',
-        displayName: 'Steve Kinney',
-        email: 'steve@mailinator.com',
-        photoURL: 'http://placekitten.com/g/200/200',
+        uid,
+        displayName,
+        email,
+        photoURL,
       },
       favorites: 0,
       comments: 0,
