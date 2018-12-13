@@ -58,12 +58,17 @@ input[type='submit'],
   font-size: 1.1em;
   padding: 0.5em;
   @include button($button-color);
-  &.star, &.create {
+  &.star, &.create, &.update {
     @include button($input-color);
   }
   &.delete {
     @include button($danger-color);
   }
+}
+
+input[type="file"] {
+  margin: 1em 0;
+  padding: 1em 0;
 }
 
 .Application {
@@ -90,13 +95,13 @@ input[type='submit'],
   @extend %authentication;
 }
 
-.UserProfile {
+.CurrentUser {
   @extend %authentication;
-  .UserProfile--profile {
+  .CurrentUser--profile {
     display: flex;
     margin-bottom: 0.5em;
   }
-  .UserProfile--information {
+  .CurrentUser--information {
     flex: 4;
   }
   img {
