@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import withUser from './withUser';
 
 class AddComment extends Component {
   state = { content: '' };
@@ -11,11 +12,16 @@ class AddComment extends Component {
   handleSubmit = event => {
     event.preventDefault();
 
+    const { onCreate, user } = this.props;
+
+    onCreate(this.state, user);
+
     this.setState({ content: '' });
   };
 
   render() {
     const { content } = this.state;
+    console.log(this.props);
     return (
       <form onSubmit={this.handleSubmit} className="AddComment">
         <input
@@ -31,4 +37,8 @@ class AddComment extends Component {
   }
 }
 
-export default AddComment;
+AddComment.defaultProps = {
+  onCreate() {}
+};
+
+export default withUser(AddComment);

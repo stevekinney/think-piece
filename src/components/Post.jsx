@@ -2,6 +2,8 @@ import React, { useContext } from 'react';
 
 import moment from 'moment';
 
+import { Link } from 'react-router-dom';
+
 import { firestore } from '../firebase';
 import { UserContext } from '../contexts/UserProvider';
 
@@ -16,7 +18,7 @@ const Post = ({ id, title, content, user, createdAt, stars, comments }) => {
   return (
     <article className="Post">
       <div className="Post--content">
-        <h3>{title}</h3>
+        <h3><Link to={`/posts/${id}`}>{title}</Link></h3>
         <div>{content}</div>
       </div>
       <div className="Post--meta">
@@ -34,7 +36,7 @@ const Post = ({ id, title, content, user, createdAt, stars, comments }) => {
             {comments}
           </p>
           <p>Posted by {user.displayName}</p>
-          <p>{moment(createdAt.toDate()).calendar()}</p>
+          <p>{moment(createdAt.toDate && createdAt.toDate()).calendar()}</p>
         </div>
         <div>
           <button

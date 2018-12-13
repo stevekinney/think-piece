@@ -7,11 +7,15 @@ import Application from './components/Application';
 import PostsProvider from './contexts/PostsProvider';
 import UserProvider from './contexts/UserProvider';
 
+import { BrowserRouter } from 'react-router-dom';
+
 render(
-  <UserProvider>
-    <PostsProvider>
-      <Application />
-    </PostsProvider>
-  </UserProvider>,
+  <BrowserRouter>
+    <UserProvider>
+      <PostsProvider>
+        <Application />
+      </PostsProvider>
+    </UserProvider>
+  </BrowserRouter>,
   document.getElementById('root'),
 );
