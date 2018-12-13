@@ -5,4 +5,11 @@ import './index.scss';
 
 import Application from './components/Application';
 
-render(<Application />, document.getElementById('root'));
+import PostsProvider from './contexts/PostsProvider';
+
+render(
+  <PostsProvider>
+    <Application />
+  </PostsProvider>,
+  document.getElementById('root'),
+);
