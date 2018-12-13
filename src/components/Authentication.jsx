@@ -12,3 +12,5 @@ const Authentication = ({ user, loading }) => {
     </div>
   )
 };
+
+export default Authentication;
