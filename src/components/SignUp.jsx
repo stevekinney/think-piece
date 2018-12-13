@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import { auth, createUserDocument } from '../firebase';
 
 class SignUp extends Component {
   state = { displayName: '', email: '', password: '' };
@@ -9,8 +10,23 @@ class SignUp extends Component {
     this.setState({ [name]: value });
   };
 
-  handleSubmit = event => {
+  handleSubmit = async event => {
     event.preventDefault();
+
+    const { email, password, displayName } = this.state;
+
+    try {
+      const { user } = await auth.createUserWithEmailAndPassword(
+        email,
+        password,
+      );
+
+      console.log({ user, displayName });
+
+      createUserDocument(user, { displayName });
+    } catch (error) {
+      alert(error);
+    }
 
     this.setState({ displayName: '', email: '', password: '' });
   };
@@ -27,6 +43,7 @@ class SignUp extends Component {
           placeholder="Display Name"
           value={displayName}
           onChange={this.handleChange}
+          required
         />
         <input
           type="email"
@@ -34,6 +51,7 @@ class SignUp extends Component {
           placeholder="Email"
           value={email}
           onChange={this.handleChange}
+          required
         />
         <input
           type="password"
@@ -41,6 +59,7 @@ class SignUp extends Component {
           placeholder="Password"
           value={password}
           onChange={this.handleChange}
+          required
         />
         <input type="submit" value="Sign Up" />
       </form>

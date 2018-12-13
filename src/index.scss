@@ -90,13 +90,13 @@ input[type='submit'],
   @extend %authentication;
 }
 
-.UserProfile {
+.CurrentUser {
   @extend %authentication;
-  .UserProfile--profile {
+  .CurrentUser--profile {
     display: flex;
     margin-bottom: 0.5em;
   }
-  .UserProfile--information {
+  .CurrentUser--information {
     flex: 4;
   }
   img {

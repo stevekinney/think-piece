@@ -1,18 +1,18 @@
-import React from 'react';
+import React, { useContext } from 'react';
 
 import moment from 'moment';
 
 import { firestore } from '../firebase';
+import { UserContext } from '../contexts/UserProvider';
 
-const Post = ({
-  id,
-  title,
-  content,
-  user,
-  createdAt,
-  stars,
-  comments,
-}) => {
+const belongsToCurrentUser = (currentUser, postAuthor) => {
+  if (!currentUser) return false;
+  return currentUser.uid === postAuthor.uid;
+}
+
+const Post = ({ id, title, content, user, createdAt, stars, comments }) => {
+  const currentUser = useContext(UserContext);
+
   return (
     <article className="Post">
       <div className="Post--content">
@@ -37,10 +37,28 @@ const Post = ({
           <p>{moment(createdAt.toDate()).calendar()}</p>
         </div>
         <div>
-          <button className="star">Star</button>
-          <button className="delete" onClick={() => firestore.collection('posts').doc(id).delete()}>
-            Delete
+          <button
+            className="star"
+            onClick={() => {
+              firestore
+                .collection('posts')
+                .doc(id)
+                .update({ stars: stars + 1 });
+            }}
+          >
+            Star
           </button>
+          {belongsToCurrentUser(currentUser, user) && <button
+            className="delete"
+            onClick={() =>
+              firestore
+                .collection('posts')
+                .doc(id)
+                .delete()
+            }
+          >
+            Delete
+          </button>}
         </div>
       </div>
     </article>
