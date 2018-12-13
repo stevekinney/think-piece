@@ -1,4 +1,4 @@
-import React from 'React';
+import React from 'react';
 
 import CurrentUser from './CurrentUser';
 import SignInAndSignUp from './SignInAndSignUp';
@@ -8,7 +8,7 @@ const Authentication = ({ user, loading }) => {
 
   return (
     <div>
-      { user ? <CurrentUser /> : <SignInAndSignUp /> }
+      { user ? <CurrentUser {...user} /> : <SignInAndSignUp /> }
     </div>
   )
 };
