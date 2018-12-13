@@ -4,6 +4,8 @@
   "private": true,
   "dependencies": {
     "firebase": "^5.7.0",
+    "firebase-admin": "^6.4.0",
+    "firebase-tools": "^6.1.2",
     "moment": "^2.22.2",
     "react": "^16.7.0-alpha.2",
     "react-dom": "^16.7.0-alpha.2",
