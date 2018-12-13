@@ -1,37 +1,21 @@
 import React, { Component } from 'react';
 
-import { firestore, auth, createUserProfileDocument } from '../firebase';
-
 import Posts from './Posts';
-import { collectIdsAndDocs } from '../utilities';
 import Authentication from './Authentication';
 
+import { Switch, Route, Link } from 'react-router-dom';
+import UserProfile from './UserProfile';
+
 class Application extends Component {
-  state = {
-    user: null,
-  };
-
-  unsubscribeFromAuth = null;
-
-  componentDidMount = async () => {
-    this.unsubscribeFromAuth = auth.onAuthStateChanged(async userAuth => {
-      const user = await createUserProfileDocument(userAuth);
-      this.setState({ user });
-    });
-  };
-
-  componentWillUnmount = () => {
-    this.unsubscribeFromAuth();
-  };
-
   render() {
-    const { user } = this.state;
-
     return (
       <main className="Application">
-        <h1>Think Piece</h1>
-        <Authentication user={user} />
-        <Posts />
+        <Link to="/"><h1>Think Piece</h1></Link>
+        <Authentication />
+        <Switch>
+          <Route exact path="/" component={Posts} />
+          <Route exact path="/profile" component={UserProfile} />
+        </Switch>
       </main>
     );
   }
