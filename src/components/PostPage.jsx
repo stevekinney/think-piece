@@ -1,47 +1,72 @@
 import React, { Component } from 'react';
 
-import { withRouter, Link } from 'react-router-dom';
+import { withRouter, Link, Redirect } from 'react-router-dom';
 import Post from './Post';
 import Comments from './Comments';
 import { firestore } from '../firebase';
 
+const collectDocAndData = doc => ({
+  id: doc.id,
+  ...doc.data(),
+});
+
 class PostPage extends Component {
   state = { post: {}, comments: [] };
 
+  get postId() {
+    return this.props.match.params.id;
+  }
+
+  get postRef() {
+    return firestore.doc(`/posts/${this.postId}`);
+  }
+
+  get commentsRef() {
+    return this.postRef.collection('comments');
+  }
+
+  unsubscribeFromPost = [];
+  unsubscribeFromComments = [];
+
   componentDidMount = async () => {
-    const postId = this.props.match.params.id;
-    const postDoc = await firestore.doc(`/posts/${postId}`).get();
+    this.unsubscribeFromPost = this.postRef.onSnapshot(snapshot => {
+      const post = collectDocAndData(snapshot);
+      this.setState({ post });
+    });
 
-    const commentsSnapshot = await firestore
-      .collection(`/posts/${postId}/comments`)
-      .get();
+    this.unsubscribeFromComments = this.commentsRef.onSnapshot(snapshot => {
+      const comments = snapshot.docs.map(collectDocAndData);
+      this.setState({ comments });
+    });
+  };
 
-    const comments = commentsSnapshot.docs.map(doc => ({
-      id: doc.id,
-      ...doc.data(),
-    }));
-
-    const post = {
-      id: postDoc.id,
-      ...postDoc.data(),
-    };
-
-    this.setState({ post, comments });
+  componentWillUnmount = () => {
+    this.unsubscribeFromPost();
+    this.unsubscribeFromComments();
   };
 
   createComment = (comment, user) => {
-    firestore.collection(`/posts/${this.props.match.params.id}/comments`).add({
-      ...comment, user
-    })
+    this.commentsRef.add({
+      ...comment,
+      user,
+    });
   };
 
   render() {
     const { post, comments } = this.state;
 
+    if (!post) {
+      return <Redirect to="/" />;
+    }
+
     return (
       <section>
         {post && <Post {...post} />}
-        <Comments comments={comments} postId={post.id} onCreate={this.createComment} />
+        <Comments
+          comments={comments}
+          postId={post.id}
+          onCreate={this.createComment}
+        />
         <footer>
           <Link to="/">&larr; Back</Link>
         </footer>
