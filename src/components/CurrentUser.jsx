@@ -6,7 +6,7 @@ const CurrentUser = ({ displayName, photoURL, email, createdAt, children }) => {
   return (
     <section className="CurrentUser">
       <div className="CurrentUser--profile">
-        <img src={photoURL} alt={displayName} />
+        {photoURL && <img src={photoURL} alt={displayName} />}
         <div className="CurrentUser--information">
           <h2>{displayName}</h2>
           <p className="email">{email}</p>
