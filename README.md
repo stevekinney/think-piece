@@ -762,7 +762,7 @@ service cloud.firestore {
   match /databases/{database}/documents {
     match /posts/{postId} {
       allow read;
-      allow create: if request.auth.uid != null && request.resource.data.title != null;
+      allow create: if request.auth.uid != null && !request.resource.data.title;
       allow update, delete: if request.auth.uid == resource.data.user.uid;
     }
   }
