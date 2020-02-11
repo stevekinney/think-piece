@@ -1,6 +1,8 @@
-import React, { Component } from 'react';
+import React, { Component } from 'react'
 
-import Posts from './Posts';
+import { firestore } from '../firebase'
+
+import Posts from './Posts'
 
 class Application extends Component {
   state = {
@@ -34,23 +36,33 @@ class Application extends Component {
         comments: 0,
       },
     ],
-  };
+  }
+
+  componentDidMount = async () => {
+    const snapshot = await firestore.collection('posts').get()
+
+    snapshot.forEach(doc => {
+      const id = doc.id
+      const data = doc.data()
+      console.log({ id, data })
+    })
+  }
 
   handleCreate = post => {
-    const { posts } = this.state;
-    this.setState({ posts: [post, ...posts] });
-  };
+    const { posts } = this.state
+    this.setState({ posts: [post, ...posts] })
+  }
 
   render() {
-    const { posts } = this.state;
+    const { posts } = this.state
 
     return (
       <main className="Application">
         <h1>Think Piece</h1>
         <Posts posts={posts} onCreate={this.handleCreate} />
       </main>
-    );
+    )
   }
 }
 
-export default Application;
+export default Application
